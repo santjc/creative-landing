@@ -14,15 +14,13 @@ export default function FullScreenCanvas({ children }: Props): JSX.Element {
       setInnerHeight(window.innerHeight);
     });
   }, []);
+
   return (
     <Canvas
       shadows={true}
-      camera={{
-        position: [45, 45, 45],
-      }}
       style={{
-        width: '100vw',
-        height: '100vh',
+        width: 'calc(100vw - 48px)',
+        height: 'calc(100vh - 66px)',
       }}
     >
       {children}

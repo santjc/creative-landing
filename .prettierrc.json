@@ -4,7 +4,7 @@
   "singleQuote": true,
   "tabWidth": 2,
   "useTabs": false,
-  "importOrder": ["^@App/(.*)$", "^@components/(.*)$", "^[./]"],
+  "importOrder": ["^@App/(.*)$", "^@components/(.*)$","^@styles/(.*)$", "^[./]"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true
 }

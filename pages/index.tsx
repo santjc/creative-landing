@@ -5,6 +5,7 @@ import { Vector3 } from 'three';
 import { randInt } from 'three/src/math/MathUtils';
 
 import EyeModel from '@components/EyeModel';
+import Floor from '@components/Floor';
 import FullScreenCanvas from '@components/FullScreenCanvas';
 import Header from '@components/Header';
 import LightBulb from '@components/LightBulb';
@@ -39,18 +40,20 @@ export default function Home() {
       <Header />
       <FullScreenCanvas>
         <LightBulb position={[-25, -5, 0]} />
-        <LightBulb position={[25, 5, 0]} />
         <OrbitControls
-          dampingFactor={1}
+          dampingFactor={0.5}
           minDistance={20}
-          enablePan={false}
-          enableRotate={false}
-          enableZoom={false}
+          enablePan={true}
+          enableRotate={true}
+          enableZoom={true}
         />
-        <ambientLight color="white" intensity={0.1} />
+        {/* <ambientLight color="white" intensity={0} /> */}
         <Center />
-        <EyeModel />
         <Rig />
+        <EyeModel />
+        <Floor />
+        
+        
         <HTMLContent />
       </FullScreenCanvas>
     </div>

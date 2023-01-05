@@ -1,15 +1,10 @@
 import { Center, OrbitControls } from '@react-three/drei';
 import { Html } from '@react-three/drei';
-import { MeshProps, useLoader, useThree } from '@react-three/fiber';
 import { useFrame } from '@react-three/fiber';
-import { Suspense, useRef } from 'react';
 import { Vector3 } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { randInt } from 'three/src/math/MathUtils';
 
-import lerp from '@App/utils';
-
-import BasicBox from '@components/BasicBox';
-import Floor from '@components/Floor';
+import EyeModel from '@components/EyeModel';
 import FullScreenCanvas from '@components/FullScreenCanvas';
 import Header from '@components/Header';
 import LightBulb from '@components/LightBulb';
@@ -29,36 +24,13 @@ const HTMLContent = () => {
   );
 };
 
-const EyeModel = () => {
-  const gltf = useLoader(GLTFLoader, '/eye/eye.glb');
-  const ref = useRef<any>();
-
-  useFrame(({ mouse, camera }) => {
-    vec.set(mouse.x * 2, mouse.x * 2, mouse.y * 2);
-    ref.current.position.lerp(vec, 0.025);
-    ref.current.rotation.y = lerp(mouse.x * 1.5, -mouse.x, 0.002);
-  });
-
-  return (
-    <Suspense fallback={null}>
-      <mesh ref={ref}>
-        <primitive
-          object={gltf.scene}
-          position={[0, 10, 0]}
-          scale={[5, 5, 5]}
-        />
-      </mesh>
-    </Suspense>
-  );
-};
-
 const vec = new Vector3();
 
 function Rig() {
   return useFrame(({ camera, mouse }) => {
     vec.set(-100, 2 * mouse.y + 10, 10 * mouse.x);
     camera.position.lerp(vec, 0.025);
-    camera.lookAt(0, 0, 0);
+    //camera.lookAt(0, 0, 0);
   });
 }
 export default function Home() {
@@ -75,15 +47,11 @@ export default function Home() {
           enableRotate={false}
           enableZoom={false}
         />
-        <ambientLight color="white" intensity={0.2} />
+        <ambientLight color="white" intensity={0.1} />
         <Center />
-        <Rig />
         <EyeModel />
-
+        <Rig />
         <HTMLContent />
-        {/* <BasicBox args={[10, 10, 10]} position={[0, 10, 0]} color={'#7FFFD4'} /> */}
-
-        <Floor />
       </FullScreenCanvas>
     </div>
   );

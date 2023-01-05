@@ -1,8 +1,9 @@
-.canvas{
-  background: #000;
+@import 'variables';
+.canvas {
+  background: $black;
 }
 
-.scene{
-  width:100vw;
-  height:100vh;
+.scene {
+  width: 100vw;
+  height: 100vh;
 }

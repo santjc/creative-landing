@@ -10,6 +10,7 @@
   font-weight: 500;
   .logo {
     display: flex;
+    color: $white;
     margin: auto auto auto 0;
   }
   nav {
@@ -20,7 +21,7 @@
   }
 
   .menuOption {
-    color: $ebony;
+    color: $white;
     font-weight: bold;
   }
 }

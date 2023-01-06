@@ -1,61 +1,37 @@
-import { Center, OrbitControls } from '@react-three/drei';
-import { Html } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
-import { Vector3 } from 'three';
-import { randInt } from 'three/src/math/MathUtils';
+import {
+  Center,
+  Html,
+  OrbitControls,
+  Scroll,
+  ScrollControls,
+} from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
 
-import EyeModel from '@components/EyeModel';
-import Floor from '@components/Floor';
-import FullScreenCanvas from '@components/FullScreenCanvas';
-import Header from '@components/Header';
-import LightBulb from '@components/LightBulb';
-import { Section } from '@components/Section';
+import Footer from '@components/Footer';
+import Model from '@components/Model';
+import Overlay from '@components/Overlay';
 
-import styles from '@styles/Home.module.scss';
-
-const HTMLContent = () => {
-  return (
-    <Section factor={1.5} offset={1}>
-      <group position={[0, 0, 0]}>
-        <Html fullscreen>
-          <h1>Hi</h1>
-        </Html>
-      </group>
-    </Section>
-  );
-};
-
-const vec = new Vector3();
-
-function Rig() {
-  return useFrame(({ camera, mouse }) => {
-    vec.set(-100, 2 * mouse.y + 10, 10 * mouse.x);
-    camera.position.lerp(vec, 0.025);
-    //camera.lookAt(0, 0, 0);
-  });
-}
 export default function Home() {
   return (
-    <div className={styles.scene}>
-      <Header />
-      <FullScreenCanvas>
-        <LightBulb position={[-25, -5, 0]} />
-        <OrbitControls
-          dampingFactor={0.5}
-          minDistance={20}
-          enablePan={true}
-          enableRotate={true}
-          enableZoom={true}
-        />
-        {/* <ambientLight color="white" intensity={0} /> */}
-        <Center />
-        <Rig />
-        <EyeModel />
-        <Floor />
-        
-        
-        <HTMLContent />
-      </FullScreenCanvas>
-    </div>
+    <>
+      <div style={{ width: '100%', height: '100vh' }}>
+        <Overlay />
+        <Canvas
+          camera={{ fov: 100, position: [0, 0, 50] }}
+          gl={{ alpha: false, antialias: false, stencil: false, depth: false }}
+          dpr={[1, 1.5]}
+        >
+          {/* <ScrollControls damping={6} pages={1}>
+            <Scroll> */}
+          <directionalLight position={[0, -10, 10]} intensity={0.2} />
+          <directionalLight position={[0, 50, 10]} intensity={0.04} />
+          <Center />
+          <Model path={'/eye/eye.glb'} />
+          {/* </Scroll>
+          </ScrollControls> */}
+        </Canvas>
+        <Footer />
+      </div>
+    </>
   );
 }

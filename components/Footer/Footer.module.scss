@@ -1,0 +1,24 @@
+@import '../../styles/variables.scss';
+.footer {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  height: 50px;
+  justify-content: center;
+  top: calc(100vh - 50px);
+  padding: 0;
+  margin: 0;
+  background: none;
+  z-index: 9999;
+  width: 25vw;
+  right: 0%;
+  border-top: 1px solid $grey;
+
+  p,
+  a {
+    text-align: center;
+    color: $white;
+    font-size: 14px;
+    font-weight: 100;
+  }
+}

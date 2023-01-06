@@ -1,0 +1,45 @@
+@import '../../styles/variables.scss';
+.overlay {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 5%;
+  background: none;
+  z-index: 9999;
+
+  width: 100vw;
+  .container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    gap: 8px;
+  }
+  a,
+  .date {
+    display: flex;
+    margin: auto 0;
+    gap: 8px;
+    color: $white;
+  }
+
+  .date a{
+    font-weight: 300;
+  }
+
+  .date {
+    font-weight: 700;
+    max-width: 50px;
+  }
+
+  .mantenimiento {
+    position: relative;
+    margin: auto;
+    bottom: 0;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 1.5;
+    color: $light-grey;
+  }
+}

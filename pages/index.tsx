@@ -18,9 +18,10 @@ export default function Home() {
       <Head>
         <title>santco.site</title>
       </Head>
-      <div style={{ width: '100%', height: '100vh' }}>
+      <div style={{ width: '100vw', height: '100vh' }}>
         <Overlay />
         <Canvas
+          id="c"
           camera={{ fov: 100, position: [0, 0, 50] }}
           gl={{ alpha: false, antialias: false, stencil: false, depth: false }}
           dpr={[1, 1.5]}

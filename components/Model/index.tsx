@@ -62,7 +62,6 @@ export default function Model({ path, position = [0, 0, 0] }: Props) {
     );
 
     //ref.current.rotation.set(0, 0, 0);
-    console.log(ref.current.rotation);
 
     //ref.current.position.lerp(vec, 0.5);
     // ref.current.rotation.y = degToRad(90) + state.mouse.x;

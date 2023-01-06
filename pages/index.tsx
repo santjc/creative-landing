@@ -6,6 +6,7 @@ import {
   ScrollControls,
 } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
+import Head from 'next/head';
 
 import Footer from '@components/Footer';
 import Model from '@components/Model';
@@ -14,6 +15,9 @@ import Overlay from '@components/Overlay';
 export default function Home() {
   return (
     <>
+      <Head>
+        <title>santco.site</title>
+      </Head>
       <div style={{ width: '100%', height: '100vh' }}>
         <Overlay />
         <Canvas

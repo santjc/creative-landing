@@ -1,13 +1,13 @@
-import { Vector3Props } from '@react-three/fiber';
+import { Vector3 } from 'three';
 
 interface Props {
-  position: any;
+  position: Vector3 | [number, number, number];
 }
 
 export default function LightBulb({ position }: Props): JSX.Element {
   return (
     <mesh position={position}>
-      <pointLight castShadow />
+      <pointLight intensity={2} castShadow />
       <meshPhongMaterial color={'red'} emissive={'yellow'} />
     </mesh>
   );

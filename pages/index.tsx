@@ -9,6 +9,7 @@ import { Canvas } from '@react-three/fiber';
 import Head from 'next/head';
 import { Suspense } from 'react';
 
+import AboutSection from '@components/AboutSection';
 import Footer from '@components/Footer';
 import LightBulb from '@components/LightBulb';
 import Model from '@components/Model';
@@ -36,19 +37,12 @@ export default function Home() {
             }}
             dpr={[1, 1.5]}
           >
-            {/* <ScrollControls damping={6} pages={1}>
-            <Scroll> */}
-            <directionalLight position={[0, -10, 10]} color={'#8ac8c7'} intensity={0.3} />
             <Center />
-            <OrbitObject orbitRadius={100} speed={1}>
-              <LightBulb position={[0, 0, 10]}></LightBulb>
-            </OrbitObject>
-            <Model path={'/eye/eye.glb'} />
-            {/* </Scroll>
-          </ScrollControls> */}
+            <Html fullscreen>
+              <AboutSection />
+            </Html>
           </Canvas>
         </Suspense>
-        <Footer />
       </div>
     </>
   );

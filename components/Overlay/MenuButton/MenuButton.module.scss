@@ -1,0 +1,113 @@
+@mixin button($bcolor, $url, $x1, $y1, $bor, $col) {
+  background: $bcolor;
+  -webkit-mask: url($url);
+  mask: url($url);
+  -webkit-mask-size: $x1 $y1;
+  mask-size: $x1 $y1;
+  border: $bor;
+  color: $col;
+}
+
+.mas {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  color: black;
+  background-color: #fff;
+  text-align: center;
+  font-weight: 300;
+  height: 30px;
+  width: 150px;
+  text-align: center;
+  font-size: 12px;
+  overflow: hidden;
+  font-weight: bold;
+  p {
+    text-align: end;
+    margin: auto 0;
+  }
+}
+
+@-webkit-keyframes ani {
+  from {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+
+  to {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+}
+
+@keyframes ani {
+  from {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+
+  to {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+}
+
+@-webkit-keyframes ani2 {
+  from {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+
+  to {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+}
+
+@keyframes ani2 {
+  from {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+
+  to {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+}
+
+.buttonContainer {
+  position: relative;
+  width: 150px;
+  height: 30px;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid #f3f3f3;
+  font-weight: 300;
+  transition: 0.5s;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  z-index: 9999999;
+
+  button {
+    width: 100%;
+    height: 100%;
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    p {
+      text-align: end;
+      margin: auto 0;
+    }
+    @include button(#000, './asset/natureSmaller.png', 7100%, 100%, none, #fff);
+    cursor: pointer;
+    -webkit-animation: ani2 0.7s steps(70) forwards;
+    animation: ani2 0.7s steps(70) forwards;
+
+    &:hover {
+      -webkit-animation: ani 0.7s steps(70) forwards;
+      animation: ani 0.7s steps(70) forwards;
+    }
+  }
+}

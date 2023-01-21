@@ -1,20 +1,39 @@
 @import '../../styles/variables.scss';
+
 .overlay {
   position: absolute;
   display: flex;
   flex-direction: column;
   top: 5%;
   background: none;
-  z-index: 9999;
+  z-index: 99999999;
 
   width: 100vw;
-  .container {
+
+  .menuContainer {
     position: relative;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0 24px;
     gap: 8px;
+
+    .menuOpt {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .menuOpt a {
+      border: 0.5px solid #fff;
+      padding: 4px 16px;
+      border-radius: 2px;
+    }
+
+    .menuOpt a:hover {
+    }
   }
   a,
   .date {
@@ -24,7 +43,7 @@
     color: $white;
   }
 
-  .date a{
+  .date a {
     font-weight: 300;
   }
 

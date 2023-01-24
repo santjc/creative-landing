@@ -82,11 +82,10 @@
   height: 30px;
   margin: 0;
   overflow: hidden;
-  border: 1px solid #f3f3f3;
+  border-bottom: 1px solid #f3f3f3;
   font-weight: 300;
   transition: 0.5s;
   letter-spacing: 1px;
-  border-radius: 4px;
   z-index: 9999999;
 
   button {

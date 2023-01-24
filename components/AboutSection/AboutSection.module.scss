@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   width: 50vw;
-  padding: 5em;
+  padding: 5em 2.5em;
   height: 40vh;
   justify-content: center;
   background: $light-grey;
@@ -14,7 +14,13 @@
   border-radius: 8px;
   h1 {
     font-size: 5em;
+    margin: 0;
     color: #000;
+  }
+  h2 {
+    font-size: 2.5em;
+    margin: 0;
+    color: $aqua;
   }
   p,
   a {
@@ -27,6 +33,9 @@
 
 @media (max-width: 1024px) {
   .about {
-    width: 100vw;
+    width: 90vw;
+    margin: auto;
+    padding: 1em;
+    left: 0;
   }
 }

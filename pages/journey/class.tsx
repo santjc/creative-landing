@@ -1,7 +1,7 @@
-import { Environment } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 
-import BasicBox from '@components/BasicBox';
+import CustomCursor from '@components/CustomCursor';
+import PhongMeshConstructor from '@components/PhongMeshConstructor';
 
 export default function Class() {
   const sizes = {
@@ -10,21 +10,32 @@ export default function Class() {
   };
 
   return (
-    <>
+    <div style={{ width: sizes.width, height: sizes.height }}>
       <Canvas
+        flat
+        linear
+        shadows
         className="canvas"
         camera={{
-          position: [0, 5, 5],
           fov: 75,
           aspect: sizes.width / sizes.height,
         }}
       >
-        <axesHelper />
-        <Environment preset={'city'} />
-        <ambientLight intensity={0.5} />
-        <BasicBox color={0xff0000} position={[0, 0, 0]} />
+        <directionalLight position={[0, 10, 10]} intensity={1} />
+        <CustomCursor />
+        <PhongMeshConstructor
+          color={0xff0000}
+          size={[1, 1, 1]}
+          position={[0, 0, 0]}
+        >
+          <boxBufferGeometry />
+        </PhongMeshConstructor>
+
+        <PhongMeshConstructor size={[5, 1, 5]} position={[0, -1, 0]}>
+          <boxBufferGeometry />
+        </PhongMeshConstructor>
       </Canvas>
-    </>
+    </div>
   );
 }
-//Video 005 - min 23
+//gsap.to(mesh.position, {duration: 1, delay: 2, x: 2})

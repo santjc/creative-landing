@@ -15,8 +15,8 @@ body {
   box-sizing: border-box;
 }
 .canvas {
-  position: fixed !important;
   inset: 0 !important;
+  background-color: $light-black;
   /* pointer-events: none !important; */
 }
 

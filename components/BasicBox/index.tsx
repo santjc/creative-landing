@@ -1,4 +1,4 @@
-import { MeshProps, useFrame } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import React, { useRef } from 'react';
 import { Mesh } from 'three';
 
@@ -9,10 +9,12 @@ interface Props {
 
 export default function BasicBox({ color, position }: Props): JSX.Element {
   const ref = useRef<Mesh>(null!);
+
   return (
-    <mesh ref={ref} position={position}>
+    <mesh ref={ref} position={position} receiveShadow={true}>
+      <axesHelper />
       <boxGeometry />
-      <meshStandardMaterial color={color} />
+      <meshPhongMaterial color={color} />
     </mesh>
   );
 }

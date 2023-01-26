@@ -1,16 +1,18 @@
-import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
+import { Mesh } from 'three';
 
-export default function Floor(): JSX.Element {
-  const ref = useRef<any>();
+interface Props {
+  position: [number, number, number];
+  size: [number, number, number];
+}
 
-  useFrame(() => {
-    ref.current.rotation.y += 0.01;
-  });
+export default function Floor({ position, size }: Props): JSX.Element {
+  const ref = useRef<Mesh>(null!);
+
   return (
-    <mesh ref={ref} receiveShadow={true}>
-      <boxBufferGeometry args={[10, 5, 10]} />
-      <meshPhysicalMaterial color={'#141414'} />
+    <mesh scale={size} position={position} ref={ref} receiveShadow>
+      <boxBufferGeometry />
+      <meshPhongMaterial color={0xcecece} />
     </mesh>
   );
 }

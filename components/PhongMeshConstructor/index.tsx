@@ -8,6 +8,7 @@ interface Props {
   color?: number;
   children: JSX.Element;
   rotateY?: boolean;
+  wireframe?: boolean;
 }
 
 export default function PhongMeshConstructor({
@@ -15,6 +16,7 @@ export default function PhongMeshConstructor({
   size,
   color,
   children,
+  wireframe,
   rotateY = false,
 }: Props): JSX.Element {
   const ref = useRef<Mesh>(null!);
@@ -27,7 +29,7 @@ export default function PhongMeshConstructor({
   return (
     <mesh scale={size} position={position} ref={ref} receiveShadow>
       {children}
-      <meshPhongMaterial color={color || 0xcecece} />
+      <meshPhongMaterial wireframe={wireframe} color={color || 0xcecece} />
     </mesh>
   );
 }

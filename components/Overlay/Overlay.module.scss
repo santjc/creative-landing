@@ -9,11 +9,14 @@
 
   width: 100vw;
   .container {
+    box-shadow: -10px 10px 0px $white;
+    border: 1px solid $grey;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin: auto;
+    padding: 0.75em 0.5em;
     gap: 8px;
   }
   a,
@@ -24,13 +27,15 @@
     color: $white;
   }
 
-  .date a{
+  .date a {
     font-weight: 300;
   }
 
   .date {
     font-weight: 700;
-    max-width: 50px;
+    p {
+      max-width: 50px;
+    }
   }
 
   .mantenimiento {

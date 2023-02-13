@@ -8,33 +8,34 @@ import { clamp } from '@App/utils';
 
 interface Props {
   path: string;
-  position?: number[];
 }
-export default function Model({ path, position = [0, 0, 0] }: Props) {
-  const vec = new Vector3();
+export default function Model({ path }: Props) {
   const gltf = useLoader(GLTFLoader, path);
   const ref = useRef<any>();
 
   useFrame((state) => {
     const xFactor = 0.5;
-    const factor = 0.75;
+    const factor = 1;
     const yFactor = 0.1;
-    vec.set(
-      state.mouse.x * 2,
-      state.mouse.y * 2,
-      state.mouse.x * state.mouse.y * 2
-    );
+    const smoothing = 0.1;
 
     const t = state.clock.elapsedTime * (2.4 / 2);
-    ref.current.rotation.set(
-      clamp(Math.cos(t) + Math.sin(t * 1), -0.1, 0.1),
-
-      degToRad(90) +
-        clamp(Math.sin(t * factor) + Math.cos(t * yFactor), -0.7, 0.7),
-      degToRad(
+    ref.current.rotation.x +=
+      (clamp(Math.cos(t) + Math.sin(t * 1), -0.1, 0.1) -
+        ref.current.rotation.x) *
+      smoothing;
+    ref.current.rotation.y +=
+      (degToRad(90) +
+        clamp(Math.sin(t * factor) + Math.cos(t * yFactor), -0.7, 0.7) -
+        ref.current.rotation.y) *
+      smoothing;
+    ref.current.rotation.z +=
+      (degToRad(
         -45 * clamp(Math.sin(t * factor) + Math.cos(t * 2 * xFactor), -1, 1)
-      )
-    );
+      ) -
+        ref.current.rotation.z) *
+      smoothing;
+
     ref.current.position.set(
       Math.cos(t) +
         Math.sin(t * 1) / 10 +
@@ -55,7 +56,7 @@ export default function Model({ path, position = [0, 0, 0] }: Props) {
   });
 
   return (
-    <mesh position={new Vector3(...position) || [0, 0, 0]} ref={ref}>
+    <mesh position={[0, 0, 0]} ref={ref}>
       <primitive object={gltf.scene} scale={[5, 5, 5]} />
     </mesh>
   );

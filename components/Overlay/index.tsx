@@ -13,8 +13,6 @@ export default function Overlay() {
             web developer
           </a>
         </div>
-
-        <p className={styles.mantenimiento}>Under construction</p>
       </div>
     </div>
   );

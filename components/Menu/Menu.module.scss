@@ -79,3 +79,26 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .menuHeader {
+    h1 {
+      font-size: 4vw;
+    }
+  }
+  .menuOption {
+    font-size: 10vw;
+  }
+  .menuFooter {
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 24px;
+    .footerColumn:not(:first-child) {
+      display: none;
+    }
+    .footerColumn {
+      gap: 4px;
+    }
+  }
+}

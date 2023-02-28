@@ -13,14 +13,20 @@ export default function Menu() {
   const timeline = useRef(gsap.timeline({ paused: true }));
   const [open, setOpen] = useState(false);
   useEffect(() => {
+    const menuOptionsArray =
+      menuOptionsContainer.current?.querySelectorAll('div') || [];
     gsap.set(menuFooter.current, { yPercent: 150 });
+    gsap.set(menuOptionsArray, { autoAlpha: 0, xPercent: -15 });
+
     timeline.current
       .to(menuContainer.current, { duration: 0.2, css: { height: '100vh' } })
+      .to(menuOptionsArray, { autoAlpha: 1, xPercent: 0, duration: 0.2 })
       .to(menuFooter.current, {
-        duration: 0.2,
+        duration: 0.3,
         yPercent: 0,
         ease: Power4.easeOut,
       })
+
       .reverse();
   }, []);
 

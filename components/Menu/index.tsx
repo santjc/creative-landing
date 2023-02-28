@@ -36,11 +36,12 @@ export default function Menu() {
   return (
     <div ref={menuContainer} className={styles.container}>
       <div className={styles.menuHeader}>
-        <h1>santco.site</h1>
+        <h1>{'</>'}</h1>
         <div
           onClick={() => setOpen(!open)}
           ref={menuIcon}
           className={styles.menuIcon}
+          style={{ color: open ? '#eb367f' : '#fff' }}
         >
           <MenuIcon size={'28px'} />
         </div>

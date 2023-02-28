@@ -1,22 +1,13 @@
-import {
-  Center,
-  Html,
-  OrbitControls,
-  Scroll,
-  ScrollControls,
-} from '@react-three/drei';
+import { Center, Html } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import Head from 'next/head';
-import { Suspense, useMemo, useRef } from 'react';
-import { BufferGeometry, Material, Mesh, Vector3 } from 'three';
+import { Suspense } from 'react';
 
-import Footer from '@components/Footer';
-import LightBulb from '@components/LightBulb';
-import Model from '@components/Model';
-import OrbitObject from '@components/OrbitObject';
 import Overlay from '@components/Overlay';
-import StackSection from '@components/StacksSection';
 import SuspenseFallback from '@components/SuspenseFallback';
+import Dots from '@components/ThreeJS/Dots';
+
+import styles from '@styles/Home.module.scss';
 
 export default function Home() {
   return (
@@ -24,36 +15,56 @@ export default function Home() {
       <Head>
         <title>santco.site</title>
       </Head>
-      <div style={{ width: '100vw', height: '100vh' }}>
-        <Suspense fallback={<SuspenseFallback />}>
-          <Overlay />
-          <Canvas
-            id="c"
-            camera={{ fov: 100, position: [0, 0, 50] }}
-            gl={{
-              alpha: false,
-              antialias: false,
-              stencil: false,
-              depth: false,
-            }}
-            dpr={[1, 1.5]}
-          >
-            <directionalLight
-              position={[0, -10, 10]}
-              color={'#8ac8c7'}
-              intensity={0.05}
-            />
-            <Html fullscreen>
-              <StackSection />
-            </Html>
-            <OrbitObject orbitRadius={100} speed={1}>
-              <LightBulb position={[0, 0, 10]}></LightBulb>
-            </OrbitObject>
-            <Model path={'eye/eye.glb'} />
-          </Canvas>
-        </Suspense>
-        <Footer />
-      </div>
+      <Suspense fallback={<SuspenseFallback />} />
+      <Canvas
+        style={{ width: '100vw', height: '100vh' }}
+        flat
+        orthographic
+        camera={{ zoom: 20 }}
+      >
+        <Dots />
+        <Center />
+        <Html fullscreen>
+          <Overlay>
+            <div className={styles.container}>
+              <div className={styles.presentation}>
+                <p className={styles.jobTitle}>web developer</p>
+                <h1 className={styles.nameTitle}>
+                  SANTIAGO <br />
+                  COLOMBATTO
+                </h1>
+                <p className={styles.basedIn}>based in Argentina.</p>
+              </div>
+            </div>
+            <footer className={styles.footer}>
+              <a
+                className={styles.getInTouch}
+                href={'mailto:sjcolombatto@gmail.com'}
+              >
+                get in touch
+              </a>
+              -
+              <a
+                className={styles.getInTouch}
+                href={'https://github.com/santjc'}
+                rel={'noreferrer'}
+                target="_blank"
+              >
+                GitHub
+              </a>
+              -
+              <a
+                href={'https://linkedin.com/in/santco'}
+                rel={'noreferrer'}
+                target="_blank"
+                className={styles.linkedin}
+              >
+                LinkedIn
+              </a>
+            </footer>
+          </Overlay>
+        </Html>
+      </Canvas>
     </>
   );
 }

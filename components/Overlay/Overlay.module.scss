@@ -1,50 +1,12 @@
-@import '../../styles/variables.scss';
 .overlay {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  top: 5%;
-  background: none;
+  position: relative;
+  height: 100vh;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
   z-index: 9999;
+}
 
-  width: 100vw;
-  .container {
-    box-shadow: -10px 10px 0px $white;
-    border: 1px solid $grey;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin: auto;
-    padding: 0.75em 0.5em;
-    gap: 8px;
-  }
-  a,
-  .date {
-    display: flex;
-    margin: auto 0;
-    gap: 8px;
-    color: $white;
-  }
-
-  .date a {
-    font-weight: 300;
-  }
-
-  .date {
-    font-weight: 700;
-    p {
-      max-width: 50px;
-    }
-  }
-
-  .mantenimiento {
-    position: relative;
-    margin: auto;
-    bottom: 0;
-    text-transform: uppercase;
-    font-weight: 900;
-    letter-spacing: 1.5;
-    color: $light-grey;
-  }
+.content {
+  padding: 48px 24px;
+  height: 100vh;
 }

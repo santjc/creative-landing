@@ -1,18 +1,17 @@
+import Menu from '@components/Menu';
+
 import styles from './Overlay.module.scss';
 
-export default function Overlay() {
-  const todayDate = new Date().toJSON().slice(0, 10);
+type Props = {
+  children: React.ReactNode;
+};
+
+export default function Overlay({ children }: Props) {
   return (
     <div className={styles.overlay}>
-      <div className={styles.container}>
-        <div className={styles.date}>
-          <p>{todayDate}</p>
-          <a>
-            santiago.colombatto
-            <br />
-            web developer
-          </a>
-        </div>
+      <Menu />
+      <div className={styles.content}>
+        <>{children}</>
       </div>
     </div>
   );

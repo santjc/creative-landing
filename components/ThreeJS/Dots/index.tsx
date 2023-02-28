@@ -1,12 +1,13 @@
 import { useFrame } from '@react-three/fiber';
 import { useLayoutEffect, useMemo, useRef } from 'react';
-import { Matrix4, Vector3 } from 'three';
+import { CircleGeometry, Material, Matrix4, Vector3 } from 'three';
 
 const roundedSquareWave = (t: number, delta: number, a: number, f: number) => {
   return ((2 * a) / Math.PI) * Math.atan(Math.sin(2 * Math.PI * t * f) / delta);
 };
 export default function Dots() {
   const ref = useRef<THREE.InstancedMesh>(null);
+  const defaultMaterial = Material;
   const { vec, transform, positions, distances } = useMemo(() => {
     const vec = new Vector3();
     const transform = new Matrix4();
@@ -36,10 +37,12 @@ export default function Dots() {
 
     ref.current ? (ref.current.instanceMatrix.needsUpdate = true) : null;
   });
+  const material = new defaultMaterial();
+  const geometry = new CircleGeometry(0.1);
   return (
-    <instancedMesh ref={ref} args={[null, null, 10000]}>
-      <circleGeometry args={[0.1]} />
-      <meshBasicMaterial />
+    <instancedMesh ref={ref} args={[geometry, material, 10000]}>
+      <circleGeometry attach="ageometry" args={[0.1]} />
+      <meshBasicMaterial attach="material" />
     </instancedMesh>
   );
 }

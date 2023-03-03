@@ -1,5 +1,5 @@
-import { useFrame } from '@react-three/fiber';
-import { useLayoutEffect, useMemo, useRef } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { CircleGeometry, Color, Material, Matrix4, Vector3 } from 'three';
 
 const roundedSquareWave = (t: number, delta: number, a: number, f: number) => {
@@ -7,14 +7,18 @@ const roundedSquareWave = (t: number, delta: number, a: number, f: number) => {
 };
 export default function Dots() {
   const ref = useRef<THREE.InstancedMesh>(null);
+  const [dotSize, setDotSize] = useState(0.075);
+  const [totalDots, setTotalDots] = useState(5000);
+  const { gl } = useThree();
+  const isMobile = gl.domElement.clientWidth < 768;
   const defaultMaterial = Material;
   const { vec, transform, positions, distances, colors } = useMemo(() => {
     const vec = new Vector3();
     const transform = new Matrix4();
-    const positions = [...Array(5000)].map((_, i) => {
+    const positions = [...Array(totalDots)].map((_, i) => {
       const position = new Vector3();
       const radius = 50;
-      const angle = (i / 2000) * Math.PI;
+      const angle = (i / (totalDots / 2)) * Math.PI;
       const x = Math.cos(angle) * radius * Math.random() * 2;
       const y = Math.sin(angle) * radius * Math.random() * 2;
       const z = Math.sin(i / 50) * 100 * Math.cos(i / 100) * Math.random() * 2;
@@ -22,15 +26,20 @@ export default function Dots() {
       return position;
     });
     const distances = positions.map((pos) => pos.length());
-    const colors = [...Array(5000)].map(() => {
+    const colors = [...Array(totalDots)].map(() => {
       const color = new Color();
-      color.setHSL(Math.random(), 1, 0.7);
+      color.setHSL(Math.random(), 1, Math.random());
       return color;
     });
 
     return { vec, transform, positions, distances, colors };
   }, []);
-
+  useEffect(() => {
+    if (isMobile) {
+      setDotSize(0.05);
+      setTotalDots(1000);
+    }
+  }, [isMobile]);
   useFrame(({ clock }) => {
     for (let i = 0; i < 5000; ++i) {
       const t = clock.elapsedTime - distances[i] / 80;
@@ -46,24 +55,20 @@ export default function Dots() {
       // Set new position in instance matrix
       transform.setPosition(newPos);
       ref.current?.setMatrixAt(i, transform);
-
-      if (scale > 1) {
-        ref.current?.setColorAt(i, colors[i]);
-      } else {
-        ref.current?.setColorAt(5000 - i, new Color('#fff'));
-      }
+      ref.current?.setColorAt(i, colors[i]);
     }
 
     ref.current && (ref.current.instanceMatrix.needsUpdate = true);
     ref.current?.instanceColor &&
       (ref.current.instanceColor.needsUpdate = true);
   });
+
   const material = new defaultMaterial();
-  const geometry = new CircleGeometry(0.1);
+  const geometry = new CircleGeometry(dotSize);
   return (
     <instancedMesh ref={ref} args={[geometry, material, 10000]}>
-      <circleGeometry args={[0.1]} />
-      <meshBasicMaterial transparent />
+      <circleGeometry args={[dotSize]} />
+      <meshBasicMaterial />
     </instancedMesh>
   );
 }

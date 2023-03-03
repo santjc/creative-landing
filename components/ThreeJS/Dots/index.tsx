@@ -9,15 +9,14 @@ export default function Dots() {
   const ref = useRef<THREE.InstancedMesh>(null);
   const [dotSize, setDotSize] = useState(0.075);
   const [totalDots, setTotalDots] = useState(5000);
+  const [radius, setRadius] = useState(50);
   const { gl } = useThree();
-  const isMobile = gl.domElement.clientWidth < 768;
-  const defaultMaterial = Material;
+  const [isMobile] = useState(gl.domElement.clientWidth < 768);
   const { vec, transform, positions, distances, colors } = useMemo(() => {
     const vec = new Vector3();
     const transform = new Matrix4();
     const positions = [...Array(totalDots)].map((_, i) => {
       const position = new Vector3();
-      const radius = 50;
       const angle = (i / (totalDots / 2)) * Math.PI;
       const x = Math.cos(angle) * radius * Math.random() * 2;
       const y = Math.sin(angle) * radius * Math.random() * 2;
@@ -38,12 +37,13 @@ export default function Dots() {
     if (isMobile) {
       setDotSize(0.05);
       setTotalDots(1000);
+      setRadius(5);
     }
-  }, [isMobile]);
+  }, [gl]);
   useFrame(({ clock }) => {
     for (let i = 0; i < 5000; ++i) {
       const t = clock.elapsedTime - distances[i] / 80;
-      const wave = roundedSquareWave(t, 0.7, 7, 0.1);
+      const wave = roundedSquareWave(t, 0.5, 7, 0.1);
       const scale = 1 + wave * 0.2;
       const timeScale = 0.005;
 
@@ -51,6 +51,10 @@ export default function Dots() {
       const newPos = positions[i].clone().multiplyScalar(scale);
       newPos.x += Math.sin(clock.elapsedTime * timeScale + i) * 5;
       newPos.y += Math.cos(clock.elapsedTime * timeScale + i) * 5;
+      newPos.z +=
+        Math.sin(clock.elapsedTime * timeScale + i) *
+        Math.cos(clock.elapsedTime * timeScale + i) *
+        5;
 
       // Set new position in instance matrix
       transform.setPosition(newPos);
@@ -63,8 +67,8 @@ export default function Dots() {
       (ref.current.instanceColor.needsUpdate = true);
   });
 
-  const material = new defaultMaterial();
-  const geometry = new CircleGeometry(dotSize);
+  const material = new Material();
+  const geometry = new CircleGeometry();
   return (
     <instancedMesh ref={ref} args={[geometry, material, 10000]}>
       <circleGeometry args={[dotSize]} />

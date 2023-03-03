@@ -51,12 +51,6 @@ export default function Menu() {
         <div className={styles.menuOption}>
           <a>Home</a>
         </div>
-        <div className={styles.menuOption}>
-          <a>About me</a>
-        </div>
-        <div className={styles.menuOption}>
-          <a>Contact</a>
-        </div>
       </div>
       <div ref={menuFooter} className={styles.menuFooter}>
         <div className={styles.footerColumn}>

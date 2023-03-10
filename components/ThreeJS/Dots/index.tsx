@@ -1,14 +1,20 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { CircleGeometry, Color, Material, Matrix4, Vector3 } from 'three';
+import { lerp } from 'three/src/math/MathUtils';
 
 const roundedSquareWave = (t: number, delta: number, a: number, f: number) => {
   return ((2 * a) / Math.PI) * Math.atan(Math.sin(2 * Math.PI * t * f) / delta);
 };
-export default function Dots() {
+
+type Props = {
+  length?: number;
+};
+
+export default function Dots({ length = 2000 }: Props) {
   const ref = useRef<THREE.InstancedMesh>(null);
   const [dotSize, setDotSize] = useState(0.075);
-  const [totalDots, setTotalDots] = useState(5000);
+  const [totalDots, setTotalDots] = useState(length);
   const [radius, setRadius] = useState(50);
   const { gl } = useThree();
   const [isMobile] = useState(gl.domElement.clientWidth < 768);
@@ -18,9 +24,9 @@ export default function Dots() {
     const positions = [...Array(totalDots)].map((_, i) => {
       const position = new Vector3();
       const angle = (i / (totalDots / 2)) * Math.PI;
-      const x = Math.cos(angle) * radius * Math.random() * 2;
-      const y = Math.sin(angle) * radius * Math.random() * 2;
-      const z = Math.sin(i / 50) * 100 * Math.cos(i / 100) * Math.random() * 2;
+      const x = Math.cos(angle) * radius * Math.random();
+      const y = (Math.random() * Math.sin(angle) * radius);
+      const z = Math.sin(i / 50) * 100 * Math.cos(i / 100) * Math.random();
       position.set(x, y, z);
       return position;
     });
@@ -40,10 +46,10 @@ export default function Dots() {
       setRadius(5);
     }
   }, [gl]);
-  useFrame(({ clock }) => {
-    for (let i = 0; i < 5000; ++i) {
+  useFrame(({ clock, camera, mouse }) => {
+    for (let i = 0; i < totalDots; ++i) {
       const t = clock.elapsedTime - distances[i] / 80;
-      const wave = roundedSquareWave(t, 0.5, 7, 0.1);
+      const wave = roundedSquareWave(t, 0.5, 1, 0.1);
       const scale = 1 + wave * 0.2;
       const timeScale = 0.005;
 
@@ -61,10 +67,9 @@ export default function Dots() {
       ref.current?.setMatrixAt(i, transform);
       ref.current?.setColorAt(i, colors[i]);
     }
-
-    ref.current && (ref.current.instanceMatrix.needsUpdate = true);
-    ref.current?.instanceColor &&
-      (ref.current.instanceColor.needsUpdate = true);
+    if (ref.current) {
+      ref.current.instanceMatrix.needsUpdate = true;
+    }
   });
 
   const material = new Material();

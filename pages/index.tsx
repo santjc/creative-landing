@@ -40,9 +40,7 @@ export default function Home() {
 
             <Html fullscreen>
               <div className={styles.container}>
-                <h1>
-                  Welcome<br></br>Im Santiago Colombatto
-                </h1>
+                <h1>Sample Text One</h1>
                 <h3>Scroll down!</h3>
               </div>
               <ModelHtml />
@@ -74,8 +72,8 @@ function ModelHtml() {
       style={{ transform: 'translateY(100vh)' }}
       className={styles.modelHtml}
     >
-      <h1>Im a Web Developer</h1>
-      <h3>Based in Argentina</h3>
+      <h1>Sample Text Two</h1>
+      <h3>Sample Text Three</h3>
     </div>
   );
 }
@@ -124,7 +122,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
     if (scroll.offset > 0.5) {
       startAnimation?.play();
     }
-    if(scroll.offset < 0.3){
+    if (scroll.offset < 0.3) {
       startAnimation?.reverse();
     }
   });

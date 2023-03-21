@@ -1,11 +1,22 @@
-import { Center, Html } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
+import {
+  Center,
+  Environment,
+  Html,
+  OrbitControls,
+  ScrollControls,
+  useGLTF,
+  useScroll,
+} from '@react-three/drei';
+import { Canvas, useFrame } from '@react-three/fiber';
+import gsap, { Power1 } from 'gsap';
 import Head from 'next/head';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
+import { Group } from 'three';
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { degToRad, lerp } from 'three/src/math/MathUtils';
 
 import Overlay from '@components/Overlay';
 import SuspenseFallback from '@components/SuspenseFallback';
-import Dots from '@components/ThreeJS/Dots';
 
 import styles from '@styles/Home.module.scss';
 
@@ -19,53 +30,118 @@ export default function Home() {
         <Canvas
           style={{ width: '100vw', height: '100vh' }}
           flat
-          orthographic
-          camera={{ zoom: 20 }}
+          camera={{ position: [0, 50, 100], fov: 60 }}
         >
-          <Dots />
-          <Center />
-          <Html fullscreen>
-            <Overlay>
+          <directionalLight intensity={0.7} position={[0, 50, 10]} />
+          <pointLight color={'red'} intensity={1} position={[0, 10, -30]} />
+
+          <ScrollControls pages={1}>
+            <Model />
+
+            <Html fullscreen>
               <div className={styles.container}>
-                <div className={styles.presentation}>
-                  <p className={styles.jobTitle}>web developer</p>
-                  <h1 className={styles.nameTitle}>
-                    SANTIAGO <br />
-                    COLOMBATTO
-                  </h1>
-                  <p className={styles.basedIn}>based in Argentina.</p>
-                </div>
+                <h1>
+                  Welcome<br></br>Im Santiago Colombatto
+                </h1>
+                <h3>Scroll down!</h3>
               </div>
-              <footer className={styles.footer}>
-                <a
-                  className={styles.getInTouch}
-                  href={'mailto:sjcolombatto@gmail.com'}
-                >
-                  get in touch
-                </a>
-                -
-                <a
-                  className={styles.getInTouch}
-                  href={'https://github.com/santjc'}
-                  rel={'noreferrer'}
-                  target="_blank"
-                >
-                  GitHub
-                </a>
-                -
-                <a
-                  href={'https://linkedin.com/in/santco'}
-                  rel={'noreferrer'}
-                  target="_blank"
-                  className={styles.linkedin}
-                >
-                  LinkedIn
-                </a>
-              </footer>
-            </Overlay>
-          </Html>
+              <ModelHtml />
+            </Html>
+          </ScrollControls>
         </Canvas>
       </Suspense>
     </>
   );
 }
+
+type GLTFResult = GLTF & {
+  nodes: {
+    Frame_ComputerFrame_0: THREE.Mesh;
+    Screen_ComputerScreen_0: THREE.Mesh;
+  };
+  materials: {
+    ComputerFrame: THREE.MeshStandardMaterial;
+    ComputerScreen: THREE.MeshStandardMaterial;
+  };
+};
+function ModelHtml() {
+  const htmlRef = useRef<HTMLDivElement>(null!);
+  const tl = useRef<GSAPTimeline>();
+  const scroll = useScroll();
+  return (
+    <div
+      ref={htmlRef}
+      style={{ transform: 'translateY(100vh)' }}
+      className={styles.modelHtml}
+    >
+      <h1>Im a Web Developer</h1>
+      <h3>Based in Argentina</h3>
+    </div>
+  );
+}
+function Model(props: JSX.IntrinsicElements['group']) {
+  const { nodes, materials } = useGLTF(
+    '/laptop/laptop-transformed.glb'
+  ) as GLTFResult;
+  const modelRef = useRef<Group>(null!);
+  const tl = useRef<GSAPTimeline>();
+  const scroll = useScroll();
+  const [startAnimation, setStartAnimation] = useState<GSAPTimeline>();
+  const [endAnimation, setEndAnimation] = useState<GSAPTimeline>();
+
+  useEffect(() => {
+    tl.current = gsap.timeline({ paused: true });
+    modelRef.current?.position.set(0, 20, 0);
+    modelRef.current?.rotation.set(0, 0, 0);
+    const _start = tl.current
+      ?.add('start')
+      .to(
+        modelRef.current?.position,
+        {
+          y: lerp(0, 50, 0.7),
+          z: lerp(modelRef.current?.position.z, 125, 0.75),
+          ease: Power1.easeInOut,
+          delay: 0.5,
+        },
+        'start'
+      )
+      .to(
+        modelRef.current?.rotation,
+        {
+          y: lerp(modelRef.current?.rotation.y, 8.98, 0.7),
+          x: lerp(modelRef.current?.rotation.x, -0.7, 0.7),
+          ease: Power1.easeInOut,
+          delay: 1,
+        },
+        'start'
+      );
+    setStartAnimation(_start);
+  }, []);
+
+  useFrame(({ camera }) => {
+    tl.current?.seek(scroll.offset * tl.current?.duration());
+  });
+
+  return (
+    <>
+      <group {...props} ref={modelRef} dispose={null}>
+        <mesh
+          geometry={nodes.Frame_ComputerFrame_0.geometry}
+          material={materials.ComputerFrame}
+          position={[0, 0, 0]}
+          rotation={[-Math.PI / 2, 0, 0]}
+          scale={100}
+        />
+        <mesh
+          geometry={nodes.Screen_ComputerScreen_0.geometry}
+          material={materials.ComputerScreen}
+          position={[0, 0.65, -10.3]}
+          rotation={[Math.PI, 0, Math.PI]}
+          scale={[100, 100, 88.24]}
+        />
+      </group>
+    </>
+  );
+}
+
+useGLTF.preload('/laptop/laptop-transformed.glb');

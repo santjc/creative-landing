@@ -98,6 +98,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
       .to(
         modelRef.current?.position,
         {
+          duration: 1,
           y: lerp(0, 50, 0.7),
           z: lerp(modelRef.current?.position.z, 125, 0.75),
           ease: Power1.easeInOut,
@@ -108,6 +109,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
       .to(
         modelRef.current?.rotation,
         {
+          duration: 1,
           y: lerp(modelRef.current?.rotation.y, 8.98, 0.7),
           x: lerp(modelRef.current?.rotation.x, -0.7, 0.7),
           ease: Power1.easeInOut,
@@ -119,7 +121,12 @@ function Model(props: JSX.IntrinsicElements['group']) {
   }, []);
 
   useFrame(({ camera }) => {
-    tl.current?.seek(scroll.offset * tl.current?.duration());
+    if (scroll.offset > 0.5) {
+      startAnimation?.play();
+    }
+    if(scroll.offset < 0.3){
+      startAnimation?.reverse();
+    }
   });
 
   return (

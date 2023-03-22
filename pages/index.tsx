@@ -34,18 +34,7 @@ export default function Home() {
         >
           <directionalLight intensity={0.7} position={[0, 50, 10]} />
           <pointLight color={'red'} intensity={1} position={[0, 10, -30]} />
-
-          <ScrollControls pages={1}>
-            <Model />
-
-            <Html fullscreen>
-              <div className={styles.container}>
-                <h1>Sample Text One</h1>
-                <h3>Scroll down!</h3>
-              </div>
-              <ModelHtml />
-            </Html>
-          </ScrollControls>
+          <Model />
         </Canvas>
       </Suspense>
     </>
@@ -62,21 +51,7 @@ type GLTFResult = GLTF & {
     ComputerScreen: THREE.MeshStandardMaterial;
   };
 };
-function ModelHtml() {
-  const htmlRef = useRef<HTMLDivElement>(null!);
-  const tl = useRef<GSAPTimeline>();
-  const scroll = useScroll();
-  return (
-    <div
-      ref={htmlRef}
-      style={{ transform: 'translateY(100vh)' }}
-      className={styles.modelHtml}
-    >
-      <h1>Sample Text Two</h1>
-      <h3>Sample Text Three</h3>
-    </div>
-  );
-}
+
 function Model(props: JSX.IntrinsicElements['group']) {
   const { nodes, materials } = useGLTF(
     '/laptop/laptop-transformed.glb'
@@ -84,13 +59,14 @@ function Model(props: JSX.IntrinsicElements['group']) {
   const modelRef = useRef<Group>(null!);
   const tl = useRef<GSAPTimeline>();
   const scroll = useScroll();
+  const htmlRef = useRef<HTMLDivElement>(null!);
   const [startAnimation, setStartAnimation] = useState<GSAPTimeline>();
-  const [endAnimation, setEndAnimation] = useState<GSAPTimeline>();
 
   useEffect(() => {
     tl.current = gsap.timeline({ paused: true });
     modelRef.current?.position.set(0, 20, 0);
     modelRef.current?.rotation.set(0, 0, 0);
+    gsap.set(htmlRef.current, { opacity: 0 });
     const _start = tl.current
       ?.add('start')
       .to(
@@ -114,21 +90,39 @@ function Model(props: JSX.IntrinsicElements['group']) {
           delay: 1,
         },
         'start'
+      )
+      .to(
+        htmlRef.current,
+        {
+          duration: 1,
+          opacity: 1,
+          ease: Power1.easeInOut,
+          delay: 1,
+        },
+        'start'
       );
     setStartAnimation(_start);
   }, []);
 
-  useFrame(({ camera }) => {
-    if (scroll.offset > 0.5) {
-      startAnimation?.play();
-    }
-    if (scroll.offset < 0.3) {
-      startAnimation?.reverse();
-    }
-  });
-
+  //TODO: NO SCROLL - BUTTONS - ICONS INSIDE PC SCREEN - COPY  https://codesandbox.io/s/mixing-html-and-webgl-w-occlusion-9keg6
   return (
     <>
+      <Html fullscreen position={[0, 0, 0]}>
+        <div ref={htmlRef} className={styles.modelControls}>
+          <button
+            className={styles.reverseBtn}
+            onClick={() => startAnimation?.reverse()}
+          >
+            Reverse
+          </button>
+          <button
+            className={styles.playBtn}
+            onClick={() => startAnimation?.play()}
+          >
+            Play
+          </button>
+        </div>
+      </Html>
       <group {...props} ref={modelRef} dispose={null}>
         <mesh
           geometry={nodes.Frame_ComputerFrame_0.geometry}
@@ -143,7 +137,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
           position={[0, 0.65, -10.3]}
           rotation={[Math.PI, 0, Math.PI]}
           scale={[100, 100, 88.24]}
-        />
+        ></mesh>
       </group>
     </>
   );

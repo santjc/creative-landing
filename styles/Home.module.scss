@@ -27,22 +27,41 @@
     font-weight: 300;
   }
 }
-.modelHtml {
+.modelControls {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   width: 100vw;
   height: 100vh;
-  flex: 1;
-  h1 {
-    text-align: center;
-    color: black;
-    margin: 8px 0;
+  justify-content: center;
+  margin: auto 0;
+
+  .reverseBtn {
+    display: flex;
+    justify-content: center;
+    margin: 24px auto auto;
+    max-width: 100px;
+    font-size: 14px;
+    border-radius: 8px;
+    outline: none;
+    background-color: #fff;
+    border: 1px solid #a1a1a1;
+    font-weight: bold;
+    padding: 8px 24px;
+    cursor: pointer;
   }
-  h3 {
-    text-align: center;
-    color: black;
-    margin: 0;
+  .playBtn {
+    display: flex;
+    justify-content: center;
+    margin: auto auto 24px;
+    max-width: 100px;
+    font-size: 14px;
+    border-radius: 8px;
+    outline: none;
+    background-color: #fff;
+    border: 1px solid #a1a1a1;
+    font-weight: bold;
+    padding: 8px 24px;
+    cursor: pointer;
   }
 }
 .presentation {

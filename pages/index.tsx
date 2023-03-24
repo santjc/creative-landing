@@ -88,6 +88,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
         duration: 0.7,
         z: 50,
         ease: Power1.easeInOut,
+        delay: 0.2,
       });
 
     camera.lookAt(modelRef.current?.position);
@@ -133,7 +134,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
             opacity: 1,
           },
           autoAlpha: 1,
-          duration: 0.5,
+          duration: 0.1,
           ease: Power2.easeInOut,
         });
     }
@@ -142,8 +143,9 @@ function Model(props: JSX.IntrinsicElements['group']) {
   };
 
   const handleReverse = () => {
-    tl.current?.reverse();
     htmlTl.current?.reverse();
+
+    tl.current?.reverse();
   };
 
   //TODO: NO SCROLL - BUTTONS - ICONS INSIDE PC SCREEN - COPY  https://codesandbox.io/s/mixing-html-and-webgl-w-occlusion-9keg6

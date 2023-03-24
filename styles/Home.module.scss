@@ -44,29 +44,30 @@
     flex: 0.5;
     h1 {
       position: relative;
-      color: #333333;
+      color: #424242;
       text-shadow: 0px 1px 4px #eaeaea;
       top: -25%;
     }
     h2 {
       position: relative;
-      color: #228b22;
+      color: #555555;
       outline: #fff;
-      top: 25%;
+      top: 30%;
     }
   }
   .reverseBtn {
     display: flex;
     opacity: 0;
     justify-content: center;
+    pointer-events: none;
     margin: 40px auto auto;
     max-width: 100px;
     font-size: 14px;
     border-radius: 8px;
     outline: none;
     background: none;
-    border: 1px solid #eaeaea;
-    background-color: #add8e66c;
+    border: 1px solid #c3c3c3;
+    background-color: #b2e2ff; //#add8e66c;
     font-weight: bold;
     padding: 8px;
     cursor: pointer;
@@ -77,8 +78,8 @@
       fill: #fff;
       transform: rotate(-180deg);
       max-height: 25px;
-      -webkit-filter: drop-shadow(0px -1px 1px rgba(0, 0, 0, 0.5));
-      filter: drop-shadow(0px -1px 1px rgba(0, 0, 0, 0.5));
+      -webkit-filter: drop-shadow(0px -1px 1px #292929);
+      filter: drop-shadow(0px -1px 1px #292929);
     }
   }
   .playBtn {
@@ -91,9 +92,8 @@
     outline: none;
     opacity: 0.7;
     background: none;
-    background-color: #add8e66c;
-
-    border: 1px solid #eaeaea;
+    background-color: #b2e2ff; //#add8e66c;
+    border: 1px solid #c3c3c3;
     font-weight: bold;
     padding: 8px;
     cursor: pointer;
@@ -103,8 +103,8 @@
     svg {
       fill: #fff;
       max-height: 25px;
-      -webkit-filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
-      filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
+      -webkit-filter: drop-shadow(0px 1px 1px #292929);
+      filter: drop-shadow(0px 1px 1px #292929);
     }
   }
 

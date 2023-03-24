@@ -1,8 +1,8 @@
 import { Html, Stage, useGLTF } from '@react-three/drei';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import gsap, { Power1, Power2 } from 'gsap';
 import Head from 'next/head';
-import { Suspense, useEffect, useRef } from 'react';
+import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Group, Mesh } from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { degToRad, lerp } from 'three/src/math/MathUtils';
@@ -25,7 +25,7 @@ export default function Home() {
           camera={{ position: [0, 35, 100], fov: 60 }}
           shadows
         >
-          <color attach="background" args={['lightblue']} />
+          <color attach="background" args={['#f5f3e6']} />
 
           <Stage intensity={0.7} adjustCamera={false} shadows="contact">
             <Model />
@@ -60,6 +60,22 @@ function Model(props: JSX.IntrinsicElements['group']) {
   const screenModelRef = useRef<Mesh>(null!);
   const landingTextRef = useRef<HTMLDivElement>(null);
   const modelScreenHtml = useRef<HTMLDivElement>(null);
+  const { viewport } = useThree();
+  const [isMobile, setIsMobile] = useState<boolean>(
+    viewport.width * viewport.factor < 768
+  );
+  const [modelDistance, setModelDistance] = useState<any>({
+    x: 0,
+    y: !isMobile ? 35 : 25,
+    z: !isMobile ? 100 : 75,
+  });
+  useLayoutEffect(() => {
+    setModelDistance({
+      x: 0,
+      y: !isMobile ? 50 : 25,
+      z: !isMobile ? 100 : 75,
+    });
+  }, [viewport.width]);
 
   useEffect(() => {
     tl.current = gsap.timeline({ paused: true });
@@ -79,8 +95,8 @@ function Model(props: JSX.IntrinsicElements['group']) {
         modelRef.current?.position,
         {
           duration: 1,
-          y: lerp(0, 50, 0.7),
-          z: lerp(modelRef.current?.position.z, 125, 0.75),
+          y: lerp(0, modelDistance.y, 0.7),
+          z: lerp(modelRef.current?.position.z, modelDistance.z, 0.75),
           ease: Power1.easeInOut,
         },
         'movement'
@@ -115,10 +131,15 @@ function Model(props: JSX.IntrinsicElements['group']) {
           autoAlpha: 0,
           css: {
             opacity: 0,
+            pointerEvents: 'none',
           },
         })
         .to(reverseBtnRef.current, {
           autoAlpha: 1,
+          css: {
+            opacity: 1,
+            pointerEvents: 'all',
+          },
           duration: 0.5,
         });
     }

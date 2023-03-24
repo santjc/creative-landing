@@ -30,10 +30,12 @@
 .modelControls {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   width: 100vw;
   height: 100vh;
-  justify-content: center;
-  margin: auto 0;
+  margin: 0;
+  z-index: 99;
+
   .landingText {
     display: flex;
     flex-direction: column;
@@ -51,8 +53,7 @@
     h2 {
       position: relative;
       color: #555555;
-      outline: #fff;
-      top: 30%;
+      top: -30%;
     }
   }
   .reverseBtn {
@@ -63,6 +64,7 @@
     margin: 40px auto auto;
     max-width: 100px;
     font-size: 14px;
+    z-index: 999;
     border-radius: 8px;
     outline: none;
     background: none;
@@ -85,7 +87,7 @@
   .playBtn {
     display: flex;
     justify-content: center;
-    margin: auto auto 40px;
+    margin: auto auto 64px;
     max-width: 100px;
     font-size: 14px;
     border-radius: 8px;
@@ -95,6 +97,7 @@
     background-color: #b2e2ff; //#add8e66c;
     border: 1px solid #c3c3c3;
     font-weight: bold;
+    z-index: 999;
     padding: 8px;
     cursor: pointer;
     box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);
@@ -121,9 +124,24 @@
     }
   }
 }
-.modelScreenContainer {
-  width: 100px;
-  background-color: black;
-  height: 100px;
-  display: flex;
+.socials {
+  display: none;
+  flex-direction: row;
+  flex: 1 !important;
+  opacity: 0;
+  width: 30vw !important;
+  height: 300px !important;
+  position: relative;
+  top: -17%;
+  a {
+    margin: 0 auto;
+    font-size: 48px;
+    max-width: 50px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  a:hover {
+    filter: drop-shadow(0px 2px 1px rgba(0, 0, 0, 0.7));
+    scale: 1.1;
+  }
 }

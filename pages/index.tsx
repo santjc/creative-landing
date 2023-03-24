@@ -30,7 +30,6 @@ export default function Home() {
           <color attach="background" args={['#f5f3e6']} />
 
           <Stage intensity={0.7} adjustCamera={false} shadows="contact">
-            <OrbitControls />
             <Model />
           </Stage>
         </Canvas>

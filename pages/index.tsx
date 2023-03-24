@@ -146,7 +146,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
             </button>
             <div ref={landingTextRef} className={styles.landingText}>
               <h1>Hi! Im Santiago</h1>
-              <h2>a Web Developer from Argentina</h2>
+              <h2>Web Developer from Argentina</h2>
             </div>
             <button
               ref={playBtnRef}

@@ -72,7 +72,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
     '/laptop/laptop-transformed.glb'
   ) as GLTFResult;
   const modelRef = useRef<Group>(null!);
-  const tl = useRef<GSAPTimeline>(null);
+  const tl = useRef<GSAPTimeline>();
   const htmlRef = useRef<HTMLDivElement>(null);
   const playBtnRef = useRef<HTMLButtonElement>(null);
   const reverseBtnRef = useRef<HTMLButtonElement>(null);

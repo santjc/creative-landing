@@ -130,7 +130,7 @@ function Model({ pausedTimeline = true }: ModelProps) {
                 <p>
                   Check out my{' '}
                   <a
-                    href={'linkedin.com/in/santco/'}
+                    href={'https://www.linkedin.com/in/santco/'}
                     target="_blank"
                     rel="noreferrer"
                     className={styles.linkedin}

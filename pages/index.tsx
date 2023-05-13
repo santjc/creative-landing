@@ -1,15 +1,17 @@
-import { Center, Html, OrbitControls, Stage, useGLTF } from '@react-three/drei';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import gsap, { Power1, Power2 } from 'gsap';
+import {
+  ContactShadows,
+  Environment,
+  Html,
+  OrbitControls,
+  useGLTF,
+} from '@react-three/drei';
+import { Canvas, useFrame } from '@react-three/fiber';
 import Head from 'next/head';
-import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Group, Mesh } from 'three';
+import { Suspense, useEffect, useRef, useState } from 'react';
+import { Group, MathUtils, Mesh } from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-import { degToRad, lerp } from 'three/src/math/MathUtils';
+import { degToRad } from 'three/src/math/MathUtils';
 
-import Arrow from '@components/Icons/Arrow';
-import GithubIcon from '@components/Icons/Github';
-import LinkedInIcon from '@components/Icons/LinkedinIcon';
 import SuspenseFallback from '@components/SuspenseFallback';
 
 import styles from '@styles/Home.module.scss';
@@ -23,15 +25,28 @@ export default function Home() {
       <Suspense fallback={<SuspenseFallback />}>
         <Canvas
           style={{ width: '100vw', height: '100vh' }}
-          flat
-          camera={{ position: [0, 15, 100], fov: 60 }}
+          camera={{ position: [0, 30, 30] }}
           shadows
         >
-          <color attach="background" args={['#f5f3e6']} />
+          <OrbitControls
+            enablePan={false}
+            enableZoom={false}
+            dampingFactor={0.5}
+            enableDamping
+            maxAzimuthAngle={degToRad(15)}
+            minAzimuthAngle={degToRad(-15)}
+            maxPolarAngle={degToRad(45)}
+            minPolarAngle={degToRad(65)}
+          />
 
-          <Stage intensity={0.7} adjustCamera={false} shadows="contact">
-            <Model />
-          </Stage>
+          <Environment preset={'city'} />
+          <Model />
+          <ContactShadows
+            position={[0, -10, 0]}
+            scale={100}
+            blur={1.5}
+            far={10}
+          />
         </Canvas>
       </Suspense>
     </>
@@ -48,175 +63,86 @@ type GLTFResult = GLTF & {
     ComputerScreen: THREE.MeshStandardMaterial;
   };
 };
-
-function Model(props: JSX.IntrinsicElements['group']) {
+type ModelProps = {
+  pausedTimeline?: boolean;
+};
+function Model({ pausedTimeline = true }: ModelProps) {
   const { nodes, materials } = useGLTF(
     '/laptop/laptop-transformed.glb'
   ) as GLTFResult;
   const modelRef = useRef<Group>(null!);
   const tl = useRef<GSAPTimeline>();
-  const htmlTl = useRef<GSAPTimeline>();
-  const htmlRef = useRef<Group>(null);
-  const playBtnRef = useRef<HTMLButtonElement>(null);
-  const reverseBtnRef = useRef<HTMLButtonElement>(null);
   const screenModelRef = useRef<Mesh>(null!);
-  const landingTextRef = useRef<HTMLDivElement>(null);
-  const socialHtmlRef = useRef<HTMLDivElement>(null);
-  const { viewport, camera } = useThree();
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    modelRef.current.position.y = MathUtils.lerp(
+      modelRef.current.position.y,
+      modelRef.current.position.y + Math.sin(t) * 0.01,
+      0.7
+    );
+
+    modelRef.current.rotation.z = MathUtils.lerp(
+      modelRef.current.rotation.z,
+      Math.sin(t) * 0.03,
+      0.5
+    );
+
+  });
 
   useEffect(() => {
-    tl.current = gsap.timeline({ paused: true });
-    htmlTl.current = gsap.timeline({ paused: true });
-    modelRef.current?.position.set(0, 5, 0);
-    modelRef.current?.rotation.set(0, 0, 0);
-    screenModelRef.current?.rotation.set(degToRad(270), 0, Math.PI);
-
-    tl.current
-      ?.to(screenModelRef.current?.rotation, {
-        duration: 0.5,
-        x: Math.PI,
-        ease: Power2.easeInOut,
-        delay: 0.5,
-      })
-      .to(modelRef.current?.rotation, {
-        duration: 0.7,
-        y: Math.PI * 2,
-        x: 0.1,
-        ease: Power2.easeInOut,
-      })
-      .to(camera.position, {
-        duration: 0.7,
-        z: 50,
-        ease: Power1.easeInOut,
-        delay: 0.2,
-      });
-
-    camera.lookAt(modelRef.current?.position);
-  }, []);
-
-  const handlePlay = () => {
-    if (reverseBtnRef && playBtnRef && landingTextRef) {
-      htmlTl.current
-        ?.to(landingTextRef && landingTextRef.current, {
-          duration: 0.5,
-          autoAlpha: 0,
-          css: {
-            display: 'none',
-            opacity: 0,
-          },
-          ease: Power2.easeInOut,
-        })
-        .to(reverseBtnRef.current, {
-          autoAlpha: 0,
-          css: {
-            opacity: 0,
-          },
-        })
-        .to(playBtnRef && playBtnRef.current, {
-          duration: 0.5,
-          autoAlpha: 0,
-          css: {
-            opacity: 0,
-            pointerEvents: 'none',
-          },
-        })
-        .to(reverseBtnRef.current, {
-          autoAlpha: 1,
-          css: {
-            opacity: 1,
-            pointerEvents: 'all',
-          },
-          duration: 0.5,
-        })
-        .to(socialHtmlRef.current, {
-          css: {
-            display: 'flex',
-            opacity: 1,
-          },
-          autoAlpha: 1,
-          duration: 0.1,
-          ease: Power2.easeInOut,
-        });
+    if (!pausedTimeline) {
+      tl.current?.play();
     }
-    tl.current?.play();
-    htmlTl.current?.play();
-  };
+  }, [pausedTimeline]);
 
-  const handleReverse = () => {
-    htmlTl.current?.reverse();
-
-    tl.current?.reverse();
-  };
-
-  //TODO: NO SCROLL - BUTTONS - ICONS INSIDE PC SCREEN - COPY  https://codesandbox.io/s/mixing-html-and-webgl-w-occlusion-9keg6
   return (
-    <group>
-      <group ref={htmlRef}>
-        <Html fullscreen position={[0, 0, -20]}>
-          <div className={styles.modelControls}>
-            <button
-              ref={reverseBtnRef}
-              className={styles.reverseBtn}
-              onClick={handleReverse}
-            >
-              <Arrow size={'22px'} />
-            </button>
-            <div ref={landingTextRef} className={styles.landingText}>
-              <h1>Hi! Im Santiago</h1>
-              <h2>Web Developer from Argentina</h2>
+    <group position={[0,-5,-15]} ref={modelRef}>
+      <mesh
+        castShadow
+        geometry={nodes.Frame_ComputerFrame_0.geometry}
+        material={materials.ComputerFrame}
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, 0, 10.5]}
+        scale={100}
+      />
+
+      <mesh
+        castShadow
+        ref={screenModelRef}
+        geometry={nodes.Screen_ComputerScreen_0.geometry}
+        material={materials.ComputerScreen}
+        position={[0, 0, 0]}
+        rotation={[0, 0, 0]}
+        scale={100}
+        renderOrder={1}
+      >
+        <Html position={[-0.001, 0.1, 0]} scale={0.05} fullscreen transform>
+          <div className={styles.screenHtml}>
+            <div className={styles.screenWindow}>
+              <div className={styles.screenBio}>
+                <p>Hi there! I&apos;m Santiago.</p>
+                <p>
+                  A 24-year-old developer hailing from Argentina. I have
+                  extensive experience with Next, AWS, R3F (Three), GSAP, and
+                  other technologies.
+                </p>
+                <p>
+                  Check out my{' '}
+                  <a
+                    href={'linkedin.com/in/santco/'}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={styles.linkedin}
+                  >
+                    LinkedIn
+                  </a>
+                </p>
+              </div>
             </div>
-            <div
-              ref={socialHtmlRef}
-              className={`${styles.landingText} ${styles.socials}`}
-            >
-              <a
-                href={'https://www.github.com/santjc'}
-                rel={'noreferrer'}
-                target={'_blank'}
-              >
-                <GithubIcon />
-              </a>
-              <a
-                href={'https://www.linkedin.com/in/santco'}
-                rel={'noreferrer'}
-                target={'_blank'}
-              >
-                <LinkedInIcon />
-              </a>
-            </div>
-            <button
-              ref={playBtnRef}
-              className={styles.playBtn}
-              onClick={handlePlay}
-            >
-              <Arrow size={'22px'} />
-            </button>
           </div>
         </Html>
-      </group>
-      <group {...props} ref={modelRef} dispose={null}>
-        <mesh
-          castShadow
-          geometry={nodes.Frame_ComputerFrame_0.geometry}
-          material={materials.ComputerFrame}
-          position={[0, 0, 0]}
-          rotation={[-Math.PI / 2, 0, 0]}
-          scale={100}
-        />
-        <mesh
-          castShadow
-          ref={screenModelRef}
-          geometry={nodes.Screen_ComputerScreen_0.geometry}
-          material={materials.ComputerScreen}
-          position={[0, 0, -10.3]}
-          rotation={[Math.PI, 0, Math.PI]}
-          scale={[100, 100, 88.24]}
-        />
-        <mesh castShadow receiveShadow position={[0, -3.5, 0]}>
-          <cylinderGeometry args={[25, 25, 5, 64]} />
-          <meshPhysicalMaterial roughness={0.2} color={'#000'} />
-        </mesh>
-      </group>
+      </mesh>
     </group>
   );
 }

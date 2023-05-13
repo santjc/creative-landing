@@ -87,7 +87,6 @@ function Model({ pausedTimeline = true }: ModelProps) {
       Math.sin(t) * 0.03,
       0.5
     );
-
   });
 
   useEffect(() => {
@@ -97,7 +96,7 @@ function Model({ pausedTimeline = true }: ModelProps) {
   }, [pausedTimeline]);
 
   return (
-    <group position={[0,-5,-15]} ref={modelRef}>
+    <group position={[0, -5, -15]} ref={modelRef}>
       <mesh
         castShadow
         geometry={nodes.Frame_ComputerFrame_0.geometry}
@@ -121,12 +120,14 @@ function Model({ pausedTimeline = true }: ModelProps) {
           <div className={styles.screenHtml}>
             <div className={styles.screenWindow}>
               <div className={styles.screenBio}>
-                <p>Hi there! I&apos;m Santiago.</p>
+                <p>Hey there, I&apos;m Santiago, </p>
                 <p>
-                  A 24-year-old developer hailing from Argentina. I have
-                  extensive experience with Next, AWS, R3F (Three), GSAP, and
-                  other technologies.
+                  a 24-year-old dev from Argentina! I&apos;m a pro at React
+                  (Next.js), AWS, R3F (Three), GSAP, and all that cool tech
+                  stuff.
                 </p>
+                <span className={styles.flagsun}></span>
+
                 <p>
                   Check out my{' '}
                   <a
@@ -136,6 +137,15 @@ function Model({ pausedTimeline = true }: ModelProps) {
                     className={styles.linkedin}
                   >
                     LinkedIn
+                  </a>
+                  , or{' '}
+                  <a
+                    href={'https://github.com/santjc'}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={styles.github}
+                  >
+                    Github
                   </a>
                 </p>
               </div>

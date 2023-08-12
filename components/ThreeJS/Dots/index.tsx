@@ -43,7 +43,7 @@ export default function Dots() {
   useFrame(({ clock }) => {
     for (let i = 0; i < 5000; ++i) {
       const t = clock.elapsedTime - distances[i] / 80;
-      const wave = roundedSquareWave(t, 0.5, 7, 0.1);
+      const wave = roundedSquareWave(t, 1, 2, 0.1);
       const scale = 1 + wave * 0.2;
       const timeScale = 0.005;
 

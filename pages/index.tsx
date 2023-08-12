@@ -13,6 +13,7 @@ import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { degToRad } from 'three/src/math/MathUtils';
 
 import SuspenseFallback from '@components/SuspenseFallback';
+import Dots from '@components/ThreeJS/Dots';
 
 import styles from '@styles/Home.module.scss';
 
@@ -70,6 +71,7 @@ function Model({ pausedTimeline = true }: ModelProps) {
   const { nodes, materials } = useGLTF(
     '/laptop/laptop-transformed.glb'
   ) as GLTFResult;
+
   const modelRef = useRef<Group>(null!);
   const tl = useRef<GSAPTimeline>();
   const screenModelRef = useRef<Mesh>(null!);
@@ -119,15 +121,12 @@ function Model({ pausedTimeline = true }: ModelProps) {
         <Html position={[-0.001, 0.1, 0]} scale={0.05} fullscreen transform>
           <div className={styles.screenHtml}>
             <div className={styles.screenWindow}>
+              <span className={styles.flag}>
+                <span className={styles.flagsun} />
+              </span>
               <div className={styles.screenBio}>
                 <p>Hey there, I&apos;m Santiago, </p>
-                <p>
-                  a 24-year-old dev from Argentina! I&apos;m a pro at React
-                  (Next.js), AWS, R3F (Three), GSAP, and all that cool tech
-                  stuff.
-                </p>
-                <span className={styles.flagsun}></span>
-
+                <p>a web developer</p>
                 <p>
                   Check out my{' '}
                   <a
